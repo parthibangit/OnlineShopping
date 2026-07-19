@@ -21,6 +21,7 @@ export class LoginPage {
 
     async verifyLogoutSuccess() {
         await expect(this.loginButton, 'Login button is not visible').toBeVisible();
+        await expect(this.page).toHaveTitle('Automation Exercise - Signup / Login')
     }
     
 }
