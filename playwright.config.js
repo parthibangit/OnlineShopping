@@ -33,7 +33,7 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'list',
+  reporter: [['list'], ['html']],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -41,7 +41,12 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    video: 'on',
+    video: 'off',
+    extraHTTPHeaders: {
+      'x-api-key': process.env.API_KEY ?? '',
+      'X-Reqres-Env': 'prod',
+      'Content-Type': 'application/json'
+    },
   },
   timeout: 60_000,
   // default time out is 5000ms, per our need we can customise

@@ -4,14 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-      "test:qa": "cross-env ENV=qa npx playwright test",
-      "test:uat": "cross-env ENV=uat npx playwright test"
+    "test:qa": "cross-env ENV=qa npx playwright test",
+    "test:uat": "cross-env ENV=uat npx playwright test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
+    "@faker-js/faker": "^10.5.0",
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.3.5",
     "cross-env": "^10.1.0",

@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 export class LoginPage {
 
@@ -14,9 +14,12 @@ export class LoginPage {
     }
 
     async login(email, password) {
-        await this.emailAddress.fill(email);
-        await this.password.fill(password);
-        await this.loginButton.click();
+        // If test step is declared, it will shown in html report.
+        return test.step('Log into application by providing login credentials', async() => {
+            await this.emailAddress.fill(email);
+            await this.password.fill(password);
+            await this.loginButton.click();
+        });     
     }
 
     async verifyLogoutSuccess() {

@@ -1,9 +1,11 @@
 import {test, expect} from '@playwright/test';
+import {faker} from '@faker-js/faker';
 
 test('Input fields test', async({ page }) => {
-
+  
+  const firstName = faker.person.firstName();
   await page.goto('https://practice-automation.com/form-fields/');
-  await page.getByTestId('name-input').fill('Parthiban');
+  await page.getByTestId('name-input').fill(firstName);
 });
 
 test('Checkbox and radio selection', async({ page }) => {
