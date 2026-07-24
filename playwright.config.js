@@ -41,6 +41,7 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
     video: 'off',
     extraHTTPHeaders: {
       'x-api-key': process.env.API_KEY ?? '',
@@ -48,8 +49,9 @@ export default defineConfig({
       'Content-Type': 'application/json'
     },
   },
-  timeout: 60_000,
-  // default time out is 5000ms, per our need we can customise
+  // default time out is 30_000ms(30s), per our need we can customise
+  timeout: 40_000,
+  // default time out is 5000ms(5s), per our need we can customise
   expect: { timeout: 7000},
 
   /* Configure projects for major browsers */
@@ -66,7 +68,8 @@ export default defineConfig({
         args: ['--start-maximized'],
         },
       deviceScaleFactor: undefined
-    },
+    }
+  },
 
     // {
     //   name: 'firefox',
@@ -89,15 +92,15 @@ export default defineConfig({
     // },
 
     /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
+    {
+      name: 'Edge',
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
+    },
     // {
     //   name: 'Google Chrome',
     //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     // },
-}],
+],
 
   /* Run your local dev server before starting the tests */
   // webServer: {

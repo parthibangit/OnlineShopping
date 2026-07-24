@@ -1,9 +1,9 @@
-import {test, expect} from "@playwright/test"
+import { test, expect } from "@playwright/test"
 
-test('Send get request to fetch product list', async({ request }) => {
+test('Send get request to fetch product list', async ({ request }) => {
 
     const productListResponse = await request.get('https://automationexercise.com/api/productsList')
-    
+
     // Print the response body
     const responseText = await productListResponse.text();
     const responseBody = await productListResponse.body();
@@ -20,10 +20,10 @@ test('Send get request to fetch product list', async({ request }) => {
     expect(productListResponse.statusText()).toBe('OK');
 });
 
-test('Send get request and parsing the response body', async({ request }) => {
+test('Send get request and parsing the response body', async ({ request }) => {
 
     const productListResponse = await request.get('https://automationexercise.com/api/productsList')
-    
+
     // Beautify the response body
     const response = await productListResponse.json();
     const prettyResponse = JSON.stringify(response, null, 2);
@@ -31,7 +31,7 @@ test('Send get request and parsing the response body', async({ request }) => {
 
     // parsing the response body
     const responseCode = response.responseCode;
-    console.log('Response code is: '+ responseCode);
+    console.log('Response code is: ' + responseCode);
 
     //parsing and fetch the array objects from response
     const productsObject = response.products;

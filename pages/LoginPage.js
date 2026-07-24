@@ -15,16 +15,16 @@ export class LoginPage {
 
     async login(email, password) {
         // If test step is declared, it will shown in html report.
-        return test.step('Log into application by providing login credentials', async() => {
+        return test.step('Log into application by providing login credentials', async () => {
             await this.emailAddress.fill(email);
             await this.password.fill(password);
             await this.loginButton.click();
-        });     
+        });
     }
 
     async verifyLogoutSuccess() {
         await expect(this.loginButton, 'Login button is not visible').toBeVisible();
         await expect(this.page).toHaveTitle('Automation Exercise - Signup / Login')
     }
-    
+
 }

@@ -5,6 +5,11 @@ test('Input fields test', async({ page }) => {
   
   const firstName = faker.person.firstName();
   await page.goto('https://practice-automation.com/form-fields/');
+
+  // Clear the input field before fill
+  await page.getByTestId('name-input').clear();
+
+  //Fill the input field
   await page.getByTestId('name-input').fill(firstName);
 });
 
@@ -57,3 +62,33 @@ test('Click operations', {tag : "@click"}, async({ page }) => {
   // Right click
   await page.getByText('Cow').click({button: 'right'});
 });
+
+test('Finding elements based on index or filter', async({ page }) => {
+
+    await page.goto('https://practice-automation.com/form-fields/');
+
+    // Click the first element from matching elements
+    await page.locator("//input[@type='checkbox']").nth(0).click();
+
+    // Click the first and last element using first and last function
+    await page.locator("//input[@type='checkbox']").first().click();
+    await page.locator("//input[@type='checkbox']").last().click();
+
+    // Click the element based on the text
+    await page.locator("//input[@type='checkbox']").filter({ hasText: 'Coffee' }).click();
+});
+
+test('Refresh, Go back and Go forward in the browser', async({ page }) => {
+
+    await page.goto('https://practice-automation.com/form-fields/');
+
+    // Refresh the browser
+    await page.reload();
+
+    // go back
+    await page.goBack();
+
+    // go forward
+    await page.goForward();
+});
+

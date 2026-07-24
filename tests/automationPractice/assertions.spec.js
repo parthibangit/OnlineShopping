@@ -14,7 +14,14 @@ test('Verify the counts', async({ page }) => {
 
     await page.goto('https://practice-automation.com/form-fields/');
 
-    const favouriteDrinks = page.locator("//input[@type='checkbox']")
+    const favouriteDrinks = page.locator("//input[@type='checkbox']");
 
-    await expect(favouriteDrinks, 'Favourite drinks count does not matched... ').toHaveCount(5);
+    try {
+        await expect(favouriteDrinks, 'Favourite drinks count does not matched... ').toHaveCount(5, {timeout: 3000});       
+    }
+    catch(error) {
+        console.log('Error occurred due to...', error);
+        throw error; // if we don't throw error, test marked as passed.
+    }
+    
 });
