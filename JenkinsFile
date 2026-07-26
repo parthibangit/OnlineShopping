@@ -71,10 +71,15 @@ pipeline {
         stage('Run Playwright Tests') {
             steps {
                 script {
-                    if (isUnix()) {
-                        sh "npm run test:${params.environment} -- --grep '${params.test_suite}' --project=${params.browser}"
-                    } else {
-                        bat "npm run test:${params.environment} -- --grep \"${params.test_suite}\" --project=${params.browser}"
+                    try {
+                        if (isUnix()) {
+                            sh "npm run test:${params.environment} -- --grep '${params.test_suite}' --project=${params.browser} --reporter=list,html"
+                        } else {
+                            bat "npm run test:${params.environment} -- --grep \"${params.test_suite}\" --project=${params.browser} --reporter=list,html"
+                        }
+                    } catch (err) {
+                        currentBuild.result = 'FAILURE'
+                        throw err
                     }
                 }
             }
@@ -82,18 +87,23 @@ pipeline {
     }
 
     post {
-
         always {
-            // 1. Publish the HTML Report to the Jenkins UI
-            publishHTML([
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'playwright-report',
-                reportFiles: 'index.html',
-                reportName: 'Playwright HTML Report',
-                reportTitles: 'Playwright Test Execution Report'
-            ])
-        }   
+            script {
+                if (fileExists('playwright-report/index.html')) {
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'playwright-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Playwright HTML Report',
+                        reportTitles: 'Playwright Test Execution Report'
+                    ])
+                    archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+                } else {
+                    echo 'Playwright HTML report was not generated. Check the test run output and report folder.'
+                }
+            }
+        }
     }
 }
