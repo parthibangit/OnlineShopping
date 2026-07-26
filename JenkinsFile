@@ -99,11 +99,14 @@ pipeline {
                         sh '''
                             mkdir -p reports/playwright
                             cp -r playwright-report/. reports/playwright/
+                            cd reports
+                            zip -r playwright-report.zip playwright
                         '''
                     } else {
                         bat '''
                             if not exist reports\\playwright mkdir reports\\playwright
                             xcopy /E /I /Y playwright-report reports\\playwright\\ >nul
+                            powershell -NoProfile -Command "Compress-Archive -Path 'reports\\playwright\\*' -DestinationPath 'reports\\playwright-report.zip' -Force"
                         '''
                     }
 
@@ -118,7 +121,8 @@ pipeline {
                     ])
 
                     archiveArtifacts artifacts: 'reports/playwright/**', fingerprint: true, allowEmptyArchive: true
-                    echo 'Playwright report published from reports/playwright.'
+                    archiveArtifacts artifacts: 'reports/playwright-report.zip', fingerprint: true, allowEmptyArchive: true
+                    echo 'Playwright report published from reports/playwright and zipped to reports/playwright-report.zip.'
                 } else {
                     echo 'Playwright HTML report was not generated. Check the test run output and report folder.'
                 }
@@ -131,27 +135,27 @@ pipeline {
                     emailext (
                     to: emailRecipients,
                     subject: "Playwright Automation Status: ${currentBuild.currentResult} - Build #${currentBuild.number}",
-                    // body: """
-                    //     <html>
-                    //     <body style="font-family: Arial, sans-serif; color: #333;">
-                    //         <h2 style="color: ${currentBuild.currentResult == 'SUCCESS' ? '#2e7d32' : '#c62828'};">
-                    //             Playwright Test Suite Status: ${currentBuild.currentResult}
-                    //         </h2>
-                    //         <p><b>Job Profile:</b> ${env.JOB_NAME}</p>
-                    //         <p><b>Build Number:</b> #${currentBuild.number}</p>
-                    //         <p><b>Target Scope Flag:</b> ${params.test_suite}</p>
-                    //         <hr style="border: 0; border-top: 1px solid #ccc;"/>
-                    //         <p>The interactive test suite results have been attached to this email as a compressed ZIP folder.</p>
-                    //         <p>Alternatively, you can view the complete dashboard directly within the pipeline framework: 
-                    //            <a href="${env.BUILD_URL}Playwright_2fHTML_2fReport/">Open Live Playwright Report</a>
-                    //         </p>
-                    //         <br/>
-                    //         <p style="font-size: 11px; color: #777;">Automated message sent by Jenkins server daemon.</p>
-                    //     </body>
-                    //     </html>
-                    // """,
-                    // mimeType: 'text/html',
-                    // attachmentsPattern: 'playwright-report/index.html' // Automatically attaches the generated archive file
+                    body: """
+                        <html>
+                        <body style="font-family: Arial, sans-serif; color: #333;">
+                            <h2 style="color: ${currentBuild.currentResult == 'SUCCESS' ? '#2e7d32' : '#c62828'};">
+                                Playwright Test Suite Status: ${currentBuild.currentResult}
+                            </h2>
+                            <p><b>Job Profile:</b> ${env.JOB_NAME}</p>
+                            <p><b>Build Number:</b> #${currentBuild.number}</p>
+                            <p><b>Target Scope Flag:</b> ${params.test_suite}</p>
+                            <hr style="border: 0; border-top: 1px solid #ccc;"/>
+                            <p>The interactive test suite results have been attached to this email as a compressed ZIP folder.</p>
+                            <p>Alternatively, you can view the complete dashboard directly within the pipeline framework: 
+                               <a href="${env.BUILD_URL}Playwright_2fHTML_2fReport/">Open Live Playwright Report</a>
+                            </p>
+                            <br/>
+                            <p style="font-size: 11px; color: #777;">Automated message sent by Jenkins server daemon.</p>
+                        </body>
+                        </html>
+                    """,
+                    mimeType: 'text/html',
+                    attachmentsPattern: 'reports/playwright-report.zip'
                 )
                 echo "Mail sent to the ${emailRecipients}."
                 }
@@ -160,7 +164,6 @@ pipeline {
                 currentBuild.result = 'UNSTABLE'
             }
                 
-        
             }
         }
     }
