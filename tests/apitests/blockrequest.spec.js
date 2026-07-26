@@ -1,6 +1,11 @@
 import { test, expect, request } from '@playwright/test';
 
-test('Block the request to simulate the API error', async ({ page }) => {
+// serial - If one test fails, all subsequent tests in the file are immediately skipped.
+// parallel - Force all tests in this file to run in parallel
+// default - Opts out of global parallelization; runs sequentially
+// test.describe.configure({mode: 'default'});
+
+test('Block the request to simulate the API error', { tag: "@network" }, async ({ page }) => {
 
     // Block the URL to simulate the API error
     await page.route('**/form-fields/', async (route) => {
@@ -16,7 +21,7 @@ test('Block the request to simulate the API error', async ({ page }) => {
 
 });
 
-test('Simulate the 500 error', { tag: "@simulate" }, async ({ page }) => {
+test('Simulate the 500 error', { tag: "@network" }, async ({ page }) => {
 
     await page.route('**/form-fields/', async (route) => {
 
