@@ -151,6 +151,7 @@ pipeline {
                     """,
                     mimeType: 'text/html',
                     attachmentsPattern: 'playwright-report/index.html' // Automatically attaches the generated archive file
+                    echo "Mail sent to the ${params.email_recipients}."
                 )
             
             }
