@@ -1,0 +1,72 @@
+pipeline {
+    agent any
+
+    parameters {
+        // Creates a dropdown selection in the Jenkins UI
+        choice(
+            name: 'environment', 
+            choices: ['qa', 'uat'], 
+            description: 'Select the environment to run the scripts.'
+        )
+        choice(
+            name: 'test_suite', 
+            choices: ['@smoke', '@regression'], 
+            description: 'Select the test tag execution scope.'
+        )
+        choice(
+            name: 'browser', 
+            choices: ['chromium', 'edge'], 
+            description: 'Select the desired browser to execute.'
+        )
+    }
+
+    tools {
+        nodejs 'NodeJS' 
+    }
+
+    // environment {
+    //     PLAYWRIGHT_BROWSERS_PATH = "${WORKSPACE}/.cache/ms-playwright"
+        
+    //     // Non-sensitive configuration variables
+    //     TEST_URL = 'https://example.com'
+    //     TEST_USER = 'jenkins_automation_user'
+        
+    //     // Securely pulling sensitive passwords from Jenkins Credentials Provider
+    //     TEST_PASSWORD = credentials('TEST_PASSWORD') 
+    // }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm ci'
+            }
+        }
+
+        stage('Install Playwright') {
+            steps {
+                sh 'npx playwright install --with-deps'
+            }
+        }
+
+        stage('Run Playwright Tests') {
+            steps {
+                script {                 
+                    // Jenkins environment variables automatically act like an invisible .env file here
+                    // sh "npx playwright test ${grepFlag} --project=${params.Browser}"
+                    sh "npm run test:${params.environment} -- --grep '${params.test_suite}' --project=${params.browser}"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'playwright-report/**', fingerprint: true, allowEmptyArchive: true
+        }
+    }
