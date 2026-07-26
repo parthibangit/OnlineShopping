@@ -127,7 +127,8 @@ pipeline {
                 def emailRecipients = params.email_recipients ?: "sarathipartha04@gmail.com"
                 
                 // 4. Construct a dynamic, styled email template
-                emailext (
+                try {
+                    emailext (
                     to: emailRecipients,
                     subject: "Playwright Automation Status: ${currentBuild.currentResult} - Build #${currentBuild.number}",
                     body: """
@@ -153,7 +154,13 @@ pipeline {
                     attachmentsPattern: 'playwright-report/index.html' // Automatically attaches the generated archive file
                 )
                 echo "Mail sent to the ${emailRecipients}."
-            
+                }
+                catch (err) {
+                echo "Mail sending failed: ${err.getMessage()}"
+                currentBuild.result = 'UNSTABLE'
+            }
+                
+        
             }
         }
     }
