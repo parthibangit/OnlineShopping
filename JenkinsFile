@@ -90,16 +90,30 @@ pipeline {
         always {
             script {
                 if (fileExists('playwright-report/index.html')) {
+                    if (isUnix()) {
+                        sh '''
+                            mkdir -p reports/playwright
+                            cp -r playwright-report/. reports/playwright/
+                        '''
+                    } else {
+                        bat '''
+                            if not exist reports\\playwright mkdir reports\\playwright
+                            xcopy /E /I /Y playwright-report reports\\playwright\\ >nul
+                        '''
+                    }
+
                     publishHTML([
                         allowMissing: false,
                         alwaysLinkToLastBuild: true,
                         keepAll: true,
-                        reportDir: 'playwright-report',
+                        reportDir: 'reports/playwright',
                         reportFiles: 'index.html',
                         reportName: 'Playwright_HTML_Report',
                         reportTitles: 'Playwright Test Execution Report'
                     ])
-                    archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+
+                    archiveArtifacts artifacts: 'reports/playwright/**', fingerprint: true, allowEmptyArchive: true
+                    echo 'Playwright report published from reports/playwright.'
                 } else {
                     echo 'Playwright HTML report was not generated. Check the test run output and report folder.'
                 }
