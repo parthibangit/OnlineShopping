@@ -24,16 +24,16 @@ pipeline {
         nodejs 'NodeJS' 
     }
 
-    // environment {
-    //     PLAYWRIGHT_BROWSERS_PATH = "${WORKSPACE}/.cache/ms-playwright"
-        
-    //     // Non-sensitive configuration variables
-    //     TEST_URL = 'https://example.com'
-    //     TEST_USER = 'jenkins_automation_user'
-        
-    //     // Securely pulling sensitive passwords from Jenkins Credentials Provider
-    //     TEST_PASSWORD = credentials('TEST_PASSWORD') 
-    // }
+    environment {
+        PLAYWRIGHT_BROWSERS_PATH = "${WORKSPACE}/.cache/ms-playwright"
+
+        // // Non-sensitive configuration variables
+        // TEST_URL = 'https://example.com'
+        // TEST_USER = 'jenkins_automation_user'
+
+        // // Securely pulling sensitive passwords from Jenkins Credentials Provider
+        // TEST_PASSWORD = credentials('TEST_PASSWORD')
+    }
 
     stages {
         stage('Checkout') {
@@ -57,10 +57,12 @@ pipeline {
         stage('Install Playwright') {
             steps {
                 script {
+                    def browserToInstall = params.browser == 'edge' ? 'msedge' : params.browser
+
                     if (isUnix()) {
-                        sh 'npx playwright install --with-deps'
+                        sh "npx playwright install --with-deps ${browserToInstall}"
                     } else {
-                        bat 'npx playwright install --with-deps'
+                        bat "npx playwright install --with-deps ${browserToInstall}"
                     }
                 }
             }

@@ -29,7 +29,7 @@ export default defineConfig({
   // If running in a CI environment (process.env.CI is truthy),
   // retry failed tests up to 2 times. Otherwise (local runs),
   // do not retry failed tests.
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 0 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
