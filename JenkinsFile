@@ -44,22 +44,36 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci'
+                script {
+                    if (isUnix()) {
+                        sh 'npm ci'
+                    } else {
+                        bat 'npm ci'
+                    }
+                }
             }
         }
 
         stage('Install Playwright') {
             steps {
-                sh 'npx playwright install --with-deps'
+                script {
+                    if (isUnix()) {
+                        sh 'npx playwright install --with-deps'
+                    } else {
+                        bat 'npx playwright install --with-deps'
+                    }
+                }
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                script {                 
-                    // Jenkins environment variables automatically act like an invisible .env file here
-                    // sh "npx playwright test ${grepFlag} --project=${params.Browser}"
-                    sh "npm run test:${params.environment} -- --grep '${params.test_suite}' --project=${params.browser}"
+                script {
+                    if (isUnix()) {
+                        sh "npm run test:${params.environment} -- --grep '${params.test_suite}' --project=${params.browser}"
+                    } else {
+                        bat "npm run test:${params.environment} -- --grep \"${params.test_suite}\" --project=${params.browser}"
+                    }
                 }
             }
         }
