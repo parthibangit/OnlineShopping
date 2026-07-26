@@ -5,8 +5,6 @@ test('Drag the element from one place to another place', async({page}) => {
     await page.goto('https://practice-automation.com/gestures/');
 
     await page.locator('id=dragMe').dragTo(page.locator('id=div2'));
-
-    await page.close();
 });
 
 test('Drag the element from source to target', async({page}) => {
@@ -17,6 +15,4 @@ test('Drag the element from source to target', async({page}) => {
     const target = page.locator('id=div2');
 
     await source.dragTo(target);
-    await page.close();
-
 });
