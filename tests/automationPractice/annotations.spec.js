@@ -7,7 +7,7 @@ test('Input fields test', async({ page }) => {
 
 });
 
-test.skip('Checkbox selection', async({ page }) => {
+test('Checkbox selection', async({ page }) => {
 
   await page.goto('https://practice-automation.com/form-fields/');
   await expect(page).toHaveTitle('Form Fields | Practice Automation')
@@ -22,7 +22,7 @@ test('Radio button selection', async({ page, browserName }) => {
 
 });
 
-test.fail('Drop down selection', async({ page }) => {
+test('Drop down selection', async({ page }) => {
 
   await page.goto('https://practice-automation.com/form-fields/');
   await expect(page).toHaveTitle('Form Fields | Practice Automation')

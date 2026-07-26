@@ -42,7 +42,8 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'off',
+    video: 'retain-on-failure',
+    headless: true,
     extraHTTPHeaders: {
       'x-api-key': process.env.API_KEY ?? '',
       'X-Reqres-Env': 'prod',

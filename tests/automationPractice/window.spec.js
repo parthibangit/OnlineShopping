@@ -41,7 +41,7 @@ test('Handle the "new window / tab" and switch back to parent tab', async({page}
     console.log(await page.locator("//b[text()='New Window']").textContent());
 });
 
-test.only('Advance way to handle to multiple windows', async({page}) => {
+test('Advance way to handle to multiple windows', async({page}) => {
 
     await page.goto('https://practice-automation.com/window-operations/');
 

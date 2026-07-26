@@ -1,6 +1,6 @@
 import {test} from "@playwright/test";
 
-test.only('Selectors - property, CSS, and XPATH', async({ page }) => {
+test('Selectors - property, CSS, and XPATH', async({ page }) => {
 
   await page.goto('https://practice-automation.com/form-fields/');
 

@@ -5,7 +5,7 @@ test.beforeEach(async ({ loginPage }) => {
     await loginPage.login(process.env.EMAIL, process.env.PASSWORD);
 });
 
-test.skip('Login into application and verify success', { tag: '@pageFixture' }, async ({ loginPage, homePage, testData }) => {
+test('Login into application and verify success', { tag: '@pageFixture' }, async ({ loginPage, homePage, testData }) => {
     await homePage.verifyUserIsOnHomePage();
     await expect(testData.successMessage.login).toEqual('User has logged in successfully!!');
     await homePage.headerComponent.verifyCompanyLogoPresence();

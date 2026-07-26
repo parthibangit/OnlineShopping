@@ -1,6 +1,6 @@
 import {test} from "@playwright/test"
 
-test.only('Drag the element from one place to another place', async({page}) => {
+test('Drag the element from one place to another place', async({page}) => {
 
     await page.goto('https://practice-automation.com/gestures/');
 
