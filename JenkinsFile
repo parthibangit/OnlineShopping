@@ -18,6 +18,11 @@ pipeline {
             choices: ['chromium', 'edge'], 
             description: 'Select the desired browser to execute.'
         )
+        string(
+            name: 'email_recipients',
+            defaultValue: 'sarathipartha04@gmail.com',
+            description: 'Email recipients for test report (comma-separated)'
+        )
     }
 
     tools {
@@ -117,6 +122,37 @@ pipeline {
                 } else {
                     echo 'Playwright HTML report was not generated. Check the test run output and report folder.'
                 }
+
+                // 3. Define your target recipient distribution list
+                def emailRecipients = params.email_recipients ?: "sarathipartha04@gmail.com"
+                
+                // 4. Construct a dynamic, styled email template
+                emailext (
+                    to: emailRecipients,
+                    subject: "Playwright Automation Status: ${currentBuild.currentResult} - Build #${currentBuild.number}",
+                    body: """
+                        <html>
+                        <body style="font-family: Arial, sans-serif; color: #333;">
+                            <h2 style="color: ${currentBuild.currentResult == 'SUCCESS' ? '#2e7d32' : '#c62828'};">
+                                Playwright Test Suite Status: ${currentBuild.currentResult}
+                            </h2>
+                            <p><b>Job Profile:</b> ${env.JOB_NAME}</p>
+                            <p><b>Build Number:</b> #${currentBuild.number}</p>
+                            <p><b>Target Scope Flag:</b> ${params.test_suite}</p>
+                            <hr style="border: 0; border-top: 1px solid #ccc;"/>
+                            <p>The interactive test suite results have been attached to this email as a compressed ZIP folder.</p>
+                            <p>Alternatively, you can view the complete dashboard directly within the pipeline framework: 
+                               <a href="${env.BUILD_URL}Playwright_2fHTML_2fReport/">Open Live Playwright Report</a>
+                            </p>
+                            <br/>
+                            <p style="font-size: 11px; color: #777;">Automated message sent by Jenkins server daemon.</p>
+                        </body>
+                        </html>
+                    """,
+                    mimeType: 'text/html',
+                    attachmentsPattern: 'playwright-report/index.html' // Automatically attaches the generated archive file
+                )
+            
             }
         }
     }
