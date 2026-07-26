@@ -96,7 +96,7 @@ pipeline {
                         keepAll: true,
                         reportDir: 'playwright-report',
                         reportFiles: 'index.html',
-                        reportName: 'Playwright HTML Report',
+                        reportName: 'Playwright_HTML_Report',
                         reportTitles: 'Playwright Test Execution Report'
                     ])
                     archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
