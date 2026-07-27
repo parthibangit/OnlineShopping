@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from "dotenv";
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Read environment variables from file.
@@ -15,6 +17,24 @@ const environment = process.env.ENV || 'uat';
 dotenv.config({ 
     path: `./environments/${environment}/.env.${environment}`,
   });
+
+// Define the target paths for allure data
+const resultsDir = path.resolve(__dirname, 'allure-results');
+const reportDir = path.resolve(__dirname, 'allure-report');
+
+// Helper function to wipe the directory contents safely
+/** @param {string} dirPath */
+const clearDirectory = (dirPath) => {
+  if (fs.existsSync(dirPath)) {
+    fs.rmSync(dirPath, { recursive: true, force: true });
+    console.log(`🧹 Cleared old allure cache at: ${dirPath}`);
+  }
+};
+
+// Execute the cleanup routine before configuration initializes
+clearDirectory(resultsDir);
+clearDirectory(reportDir);
+
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -35,7 +55,8 @@ export default defineConfig({
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ['list'],
-    ['html', { open: 'never', outputFolder: 'playwright-report' }]
+    ['html', { open: 'never', outputFolder: 'playwright-report' }],
+    ['allure-playwright', { resultsDir: 'allure-results' }]
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
