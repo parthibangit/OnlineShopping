@@ -1,3 +1,7 @@
+
+// Basic operations using objects
+// ==============================
+
 const userInfo = {
 
     firstName: 'Parthiban',
@@ -37,3 +41,25 @@ for (const key in userInfo) {
     console.log(`Key is ${key} and value is ${value}`);
 };
 
+
+// Converting objects keys into array and set
+// ==========================================
+
+// Converting an object to array
+// =============================
+
+const keys = Object.keys(userInfo);           // keys and values return as array
+const values = Object.values(userInfo);
+const pairs = Object.entries(userInfo);
+console.log(keys);
+console.log(values);
+console.log(pairs);
+
+// Converting as Object to Set
+// ===========================
+const keysSet = new Set(Object.keys(userInfo));
+const valuesSet = new Set(Object.values(userInfo));
+const pairsSet = new Set(Object.entries(userInfo));
+console.log(keysSet);
+console.log(valuesSet);
+console.log(pairsSet);

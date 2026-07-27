@@ -16,6 +16,24 @@ const splicedLastNames = lastNames.splice(0, 2, 'Vetri', 'Murugan'); // 2 elemen
 console.log('Spliced arrays is: ', splicedLastNames);    // print the array which has removed values.
 console.log(lastNames);            // original array has modified
 
+//============================================================================================================================
+
+// converting array into set
+// =========================
+
+const values = [10, 20, 30, 30, 50, 60]
+const newSet = new Set(values);                  // standard way of converting
+console.log('Converted to set: ', newSet);
+
+const modifiedValue = [...new Set(values)];      // using spreading concept to convert and return it to array
+console.log('Converted to set using spreading: ', modifiedValue);
+
+const emptySet = new Set();
+values.forEach( value => {
+    emptySet.add(value);
+})
+console.log('Empty set after adding values: ', emptySet);
+
 //=============================================================================================================================
 
 // filter, map, reduce 
