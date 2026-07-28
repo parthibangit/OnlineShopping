@@ -1,5 +1,13 @@
 import {test, expect} from '@playwright/test';
-import {faker} from '@faker-js/faker';
+import {faker, tr} from '@faker-js/faker';
+
+test.describe.configure({mode: 'parallel'});
+
+test.use({
+  headless: false,
+  ignoreHTTPSErrors: true,
+  screenshot: 'on'
+});
 
 test('Input fields test', async({ page }) => {
   

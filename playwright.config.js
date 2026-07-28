@@ -84,13 +84,14 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] ,
+      channel: 'chrome',
     // 1. Disable the default 1280x720 viewport 
       viewport: null,
 
     // Add a delay in milliseconds between each operation (e.g., 500ms)
       launchOptions: {
         slowMo: 1000,
-        args: ['--start-maximized'],
+        args: ['--start-maximized', '--deny-permission-prompts'],
         },
       deviceScaleFactor: undefined
     }

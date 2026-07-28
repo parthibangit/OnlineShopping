@@ -1,6 +1,6 @@
 import {test} from "@playwright/test"
 
-test.describe('Grouping the test to implement hooks concept...', () => {
+test.describe('Grouping the test to implement hooks concept...', {tag: "@group"}, () => {
 
     // It will run before all the test begins per worker...
     test.beforeAll( async() => {

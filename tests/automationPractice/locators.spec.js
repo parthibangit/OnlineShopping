@@ -41,3 +41,41 @@ test('Built-in Selectors @built', async({ page }) => {
   await page.getByRole('checkbox', { name: 'Water'}).click();
 
 });
+
+test('Find the total elements @count', async({ page }) => {
+
+  await page.goto('https://practice-automation.com/form-fields/');
+
+  await page.waitForSelector('//label[contains(@for, "color")]', {state: 'visible'});
+  const totalElements = await page.locator('//label[contains(@for, "color")]');
+
+  console.log(`Total elements are ${await totalElements.count()}`);
+});
+
+test('Loop through each element @loop', async({ page }) => {
+
+  await page.goto('https://practice-automation.com/form-fields/');
+
+  await page.waitForSelector('//label[contains(@for, "color")]', {state: 'visible'});
+  const totalElements = await page.locator('//label[contains(@for, "color")]');
+
+  // Iterate the elements and click the element using for loop.
+
+  const arrayOfElements = await totalElements.all();
+
+  for(let element of arrayOfElements) {
+     let text = await element.textContent()
+     if(text === 'Blue') {
+        await element.click();
+        console.log('Desired element has been clicked...');
+        break;
+     }
+  }
+
+  // Iterate the elements and print the element text using for each.
+
+  const arrayText = await totalElements.allTextContents();
+  arrayText.forEach((text, index) => {
+     console.log(`${index} element text is ${text}`)
+  })
+});

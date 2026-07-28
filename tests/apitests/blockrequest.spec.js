@@ -3,7 +3,7 @@ import { test, expect, request } from '@playwright/test';
 // serial - If one test fails, all subsequent tests in the file are immediately skipped.
 // parallel - Force all tests in this file to run in parallel
 // default - Opts out of global parallelization; runs sequentially
-// test.describe.configure({mode: 'default'});
+// test.describe.configure({mode: 'parallel'});
 
 test('Block the request to simulate the API error', { tag: "@network" }, async ({ page }) => {
 
